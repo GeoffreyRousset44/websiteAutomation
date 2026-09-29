@@ -14,13 +14,15 @@ test.beforeEach(async ({ page }) => {
 test('successSearch', async ({ page }) => {
   const Products = new ProductPage(page);
   await Products.goToProducts();
-    await Products.searchFunction('polo');
-    await expect(Products.getSearchResult()).toBeVisible(); 
+  await Products.closePopup();
+  await Products.searchFunction('polo');
+  await expect(Products.getSearchResult()).toBeVisible(); 
 });
 
 test('emptySearch', async ({ page }) => {
   const Products = new ProductPage(page);
   await Products.goToProducts();
+  await Products.closePopup();
     await Products.searchFunction('rqwerqwe');
     await expect(Products.getSearchResult()).not.toBeVisible(); 
 });

@@ -31,12 +31,13 @@ export class LoginPage {
     private zipcode: Locator;
     private mobile_number: Locator;
     private create_account_button: Locator;
+    
 
     constructor(page: Page) {
         this.page = page;
 
         //general
-        this.consent = page.getByRole('button', { name: 'Consent' });
+        this.consent = page.getByRole('button', { name: 'Consent' });        
         this.login_register = page.getByRole('link', { name: ' Signup / Login' });
         this.logout_button = page.getByRole('link', { name: ' Logout' });
 
@@ -75,9 +76,15 @@ export class LoginPage {
     }
 
     async clickConsent(): Promise<void> {
-        await this.consent.click();
+        try {
+            if (await this.consent.isVisible({ timeout: 1000 })) {
+                await this.consent.click();
+            }
+        } catch {
+            // Popup did not appear — continue the test
+        }
     }
-
+    
     async clickLoginRegister(): Promise<void> {
         await this.login_register.click();
     }
