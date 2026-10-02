@@ -165,4 +165,19 @@ export class LoginPage {
     getLoginRegisterLink() {
         return this.login_register;
     }
+
+    async closePopup(): Promise<void> {
+        const iframes = this.page.locator('iframe');
+
+        for (let i = 0; i < await iframes.count(); i++) {
+            const frame = iframes.nth(i).contentFrame();
+    
+            const closeButton = frame.getByRole('button', { name: 'Close ad' });
+    
+            if (await closeButton.isVisible({ timeout: 2000 }).catch(() => false)) {
+                await closeButton.click();
+                return;
+            }
+        }
+    }
 }

@@ -7,9 +7,7 @@ export class CartPage {
     private empty_cart: Locator;
     private first_product_name: Locator;
     private close_popup: Locator;
-    private remove_item_button: Locator;
-    
-
+    private remove_item_button: Locator; 
 
 constructor(page: Page) {
         this.page = page;
@@ -20,8 +18,10 @@ constructor(page: Page) {
         this.close_popup = page.locator('iframe[name="aswift_1"]').contentFrame().getByRole('button', { name: 'Close ad' });
         
         //cart content
-        this.first_product_name = page.getByRole('heading', { name: 'Premium Polo T-Shirts' });
-        this.remove_item_button = page.locator('.cart_quantity_delete');
+        this.first_product_name = page.getByRole('link', { name: 'Product Image' })
+       
+        //delete product if only one product
+        this.remove_item_button = page.locator('.cart_quantity_delete');   
     }
 
     goToCart() {
@@ -37,10 +37,11 @@ constructor(page: Page) {
     }
 
     async deleteItem(): Promise<void> {    
-        try {
-            if (await this.remove_item_button.isVisible({ timeout: 1000 })) {
-                await this.remove_item_button.click();
-            }
+        try {      
+        //delete all the items in the cart        
+        while (await this.remove_item_button.count() > 0) {
+            await this.remove_item_button.first().click();
+        }       
         } catch {
             // Cart was already empty — continue the test
         }
